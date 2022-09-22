@@ -3,10 +3,11 @@ import { useParams } from 'react-router-dom'
 import { PlayersList } from '../PlayersList'
 import { usePlayers } from '../usePlayers'
 import { Playground } from './Playground'
+
 interface PlayProps {}
 
 const Play = (props: PlayProps): JSX.Element => {
-  const { gameId, ...rest } = useParams()
+  const { gameId } = useParams()
 
   const players = usePlayers(gameId)
   return (
