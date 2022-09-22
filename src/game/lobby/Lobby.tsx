@@ -1,21 +1,17 @@
-import React, { useEffect } from 'react'
+import React, {  } from 'react'
 import {
-  useLocation,
-  useNavigate,
-  useNavigation,
   useParams,
 } from 'react-router-dom'
-import { useConnections } from '../../connection/PeerProvider'
+import { usePlayers } from '../../connection/PeerProvider'
 import { PlayerLabel } from '../PlayerLabel'
 import { PlayersList } from '../PlayersList'
 import { QrGenerator } from '../QrGenerator'
-import { usePlayers } from '../usePlayers'
 
 interface LobbyProps {}
 
 export const Lobby = () => {
   const { gameId, ...rest } = useParams()
-  const players = useConnections()
+  const players = usePlayers()
 
   const gameUrl = `${window.location.protocol}//${window.location.host}/controller/${gameId}`
   const playUrl = `${window.location.protocol}//${window.location.host}/game/${gameId}/play`

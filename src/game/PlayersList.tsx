@@ -8,7 +8,7 @@ export const PlayersList = ({ players }: PlayersListProps) => {
   return (
     <ul>
       {players.map(player => (
-        <li key={player.id}>{player.id}</li>
+        <li key={player.playerId}>{player.playerId}</li>
       ))}
     </ul>
   )

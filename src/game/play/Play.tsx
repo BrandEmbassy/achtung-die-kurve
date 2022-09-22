@@ -1,15 +1,13 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { usePlayers } from 'src/connection/PeerProvider'
 import { PlayersList } from '../PlayersList'
-import { usePlayers } from '../usePlayers'
 import { Playground } from './Playground'
 
 interface PlayProps {}
 
 const Play = (props: PlayProps): JSX.Element => {
-  const { gameId } = useParams()
 
-  const players = usePlayers(gameId)
+  const players = usePlayers()
   return (
     <div>
       <Playground />

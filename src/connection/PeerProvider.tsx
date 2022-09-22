@@ -1,5 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import { Peer } from "peerjs";
+import { Player } from "../game/PlayerLabel";
 
 const PeerContext = createContext();
 
@@ -59,6 +60,12 @@ export function usePeer() {
 export function useConnections() {
   const {connections} = useContext(PeerContext)
   return connections;
+}
+
+export function usePlayers(): Array<Player> {
+  const connections = useConnections()
+
+  return connections.map(c => ({playerId: c.connectionId, name: 'x', color: 'y'}))
 }
 
 export function useGameConnection(gameId) {
