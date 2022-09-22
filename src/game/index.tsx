@@ -1,7 +1,8 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
+import Lobby from './lobby'
 import NewGameRedirect from './NewGameRedirect'
-import { Lobby } from './lobby'
+
 import Play from './play'
 
 export const Game = (): JSX.Element => {
