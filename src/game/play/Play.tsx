@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 import { PlayersList } from '../PlayersList'
 import { usePlayers } from '../usePlayers'
-import { Playground } from './Playround'
+import { Playground } from './Playground'
 interface PlayProps {}
 
 const Play = (props: PlayProps): JSX.Element => {
