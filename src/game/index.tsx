@@ -1,16 +1,15 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import NewGameRedirect from './NewGameRedirect'
-interface GameProps {
+import Lobby from './lobby'
+import Play from './play'
 
-}
 
-const X = () => (<div>game1</div>)
-
-export const Game = (props: GameProps): JSX.Element => {
+export const Game = (): JSX.Element => {
   return (
     <Routes>
-      <Route path="/:gameId" element={<X />} />
+      <Route path="/:gameId" element={<Lobby />} />
+      <Route path="/:gameId/play" element={<Play />} />
       <Route path='/' element={<NewGameRedirect />} />
     </Routes>
   )
