@@ -8,7 +8,7 @@ export const QrGenerator = ({ url }) => {
       <QRCodeCanvas
         /* size={128} */
         style={{ height: 'auto', maxWidth: '25%', width: '25%' }}
-        value={'bla'}
+        value={url}
       />
     </div>
   )
