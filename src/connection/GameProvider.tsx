@@ -1,13 +1,25 @@
-import { createContext, useContext, useState } from 'react';
-import { useGameConnection } from './PeerProvider';
+import { createContext, useContext, useState, useCallback } from "react";
+import { useGameConnection } from "./PeerProvider";
+import { Events } from "./events";
 
-const GameContext = createContext()
+const GameContext = createContext();
 
-export function GameProvider({children, gameId}) {
-  const [player, updatePlayer] = useState();
+export function GameProvider({ children, gameId }) {
+  const [player, updatePlayerInternal] = useState();
   const connection = useGameConnection(gameId);
 
-  return <GameContext.Provider value={{player, updatePlayer}}>{children}</GameContext.Provider>
+  const updatePlayer = useCallback((player) => {
+    connection.send({ eventName: Events.PLAYER, payload: player });
+    updatePlayerInternal(player);
+  }, [connection]);
+
+  return connection ? (
+    <GameContext.Provider value={{ player, updatePlayer }}>
+      {children}
+    </GameContext.Provider>
+  ) : (
+    "Connecting..."
+  );
 }
 
 export function useGame() {

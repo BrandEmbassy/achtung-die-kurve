@@ -1,7 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { Player } from '../game/PlayerLabel';
 import React  from 'react';
-import { useGameConnection } from 'src/connection/PeerProvider';
 import { useGame } from 'src/connection/GameProvider';
 
 

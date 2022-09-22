@@ -1,6 +1,7 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import { Peer } from "peerjs";
 import { Player } from "../game/PlayerLabel";
+import { Events } from "./events";
 
 const PeerContext = createContext();
 const GameConnectionContext = createContext();
@@ -63,18 +64,39 @@ export function useConnections() {
   return connections;
 }
 
-export function usePlayers(): Array<Player> {
+const useConnectionsEvent = (eventName, process) => {
   const connections = useConnections();
 
-  return connections.map((c) => ({
-    playerId: c.connectionId,
-    name: "x",
-    color: "y",
-  }));
+  useEffect(() => {
+    connections.forEach((conn) =>
+      conn.on("data", (data) => {
+        if (data.eventName === eventName) {
+          const cleanup = process(data.payload);
+          conn.on("close", cleanup);
+        }
+      })
+    );
+  }, [eventName, process]);
+};
+
+export function usePlayers(): Array<Player> {
+  const [players, setPlayers] = useState([]);
+
+  useConnectionsEvent(Events.PLAYER, (player) => {
+    setPlayers((prev) => [...prev, player]);
+
+    return () => {
+      console.log('💥 Cleanup players')
+      setPlayers((prev) =>
+        prev.filter((p) => p.playerId !== player.playerId)
+      );
+    }
+  });
+
+  return players;
 }
 
 export function useGameConnection(gameId) {
-
   const [connection, setConnection] = useState(null);
   const peer = usePeer();
   useEffect(() => {
@@ -82,7 +104,7 @@ export function useGameConnection(gameId) {
     const connection = peer.connect(gameId);
     connection.on("open", (data) => {
       console.log("connection success", gameId);
-      setConnection(connection)
+      setConnection(connection);
     });
     connection.on("error", (data) => {
       console.log("connection failed", gameId);
@@ -93,5 +115,5 @@ export function useGameConnection(gameId) {
     };
   }, [gameId, peer]);
 
-  return connection
+  return connection;
 }
