@@ -20,4 +20,10 @@ export const Playground = () => {
     
     return clearInterval(interval)
   }, [])
+
+  return (
+    <>
+      Playground
+    </>
+  )
 }
