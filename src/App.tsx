@@ -6,9 +6,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/game" element={<Game />} id="game" />
-        <Route path="/controller" element={<Controller />} />
-        <Route path='*' element={ <Navigate replace to="/game" />} />
+        <Route path="/game/*" element={<Game />} id="game" />
+        <Route path="/controller/*" element={<Controller />} />
+        <Route path='*' element={ <Navigate replace to="game" />} />
       </Routes>
     </BrowserRouter>
   );
