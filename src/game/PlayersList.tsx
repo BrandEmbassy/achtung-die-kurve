@@ -1,15 +1,15 @@
 import React from 'react'
-import { Player, PlayerLabel } from './PlayerLabel'
+import { Player } from './PlayerLabel'
 
 interface PlayersListProps {
   players: Array<Player>
 }
 export const PlayersList = ({ players }: PlayersListProps) => {
   return (
-    <div>
+    <ul>
       {players.map(player => (
-        <PlayerLabel key={player.playerId} {...player} />
+        <li key={player.id}>{player.id}</li>
       ))}
-    </div>
+    </ul>
   )
 }

@@ -1,20 +1,29 @@
-import React from 'react'
-import { Routes, Route } from 'react-router-dom'
-import { Register } from './Register'
-import { Play } from './Play'
-import { NewUserRedirect } from './NewUserRedirect';
+import React from "react";
+import { Routes, Route, useParams } from "react-router-dom";
+import { Register } from "./Register";
+import { Play } from "./Play";
+import { NewUserRedirect } from "./NewUserRedirect";
+import { PeerProvider } from "../connection/PeerProvider";
 
-interface ControllerProps {
 
-}
-
-export const Controller = (props: ControllerProps): JSX.Element => {
+export const Controller = (): JSX.Element => {
   return (
     <Routes>
       <Route path="/:gameId" element={<NewUserRedirect />} />
-      <Route path="/:gameId/register/:userId" element={<Register />} />
-      <Route path='/:gameId/play/:userId' element={<Play />} />
+      <Route path="/:gameId/user/:userId/*" element={<ControllerWithPeerConnection />} />
     </Routes>
-  )
-}
+  );
+};
 
+export const ControllerWithPeerConnection = (): JSX.Element => {
+  const { userId } = useParams();
+
+  return (
+    <PeerProvider peerId={userId}>
+      <Routes>
+        <Route path="/register" element={<Register />} />
+        <Route path="/play" element={<Play />} />
+      </Routes>
+    </PeerProvider>
+  );
+};

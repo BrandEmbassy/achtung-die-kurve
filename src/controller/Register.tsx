@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import { Player } from '../game/PlayerLabel';
 import React  from 'react';
+import { useGameConnection } from 'src/connection/PeerProvider';
 
 interface RegisterProps {
   player?: Player;
@@ -9,6 +10,8 @@ interface RegisterProps {
 
 export const Register: React.FC<RegisterProps> = (props) => {
   const {gameId, userId} = useParams()
+
+  useGameConnection(gameId);
 
   const handleRegisterPlayer = (event) => {
     event.preventDefault();
@@ -35,5 +38,3 @@ export const Register: React.FC<RegisterProps> = (props) => {
     </div>
   )
 }
-
-

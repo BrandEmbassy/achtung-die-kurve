@@ -7,6 +7,6 @@ export function NewUserRedirect() {
   const { gameId } = useParams();
 
   return (
-    <Navigate to={`/controller/${gameId}/register/${newUserId}`} />
+    <Navigate to={`/controller/${gameId}/user/${newUserId}/register`} />
   );
 }
