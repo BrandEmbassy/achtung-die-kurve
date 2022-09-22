@@ -6,7 +6,8 @@ export const Register: React.FC<{}> = () => {
   const {gameId, userId} = useParams()
   return (
     <div>
-      Register
+      <p>Register to game {gameId}</p>
+      <p>I'm {userId}</p>
       <Link to={`/controller/${gameId}/play/${userId}`}>Start</Link>
     </div>
   )
