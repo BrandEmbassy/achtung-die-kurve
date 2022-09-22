@@ -3,18 +3,19 @@ import { Peer } from "peerjs";
 import { Player } from "../game/PlayerLabel";
 
 const PeerContext = createContext();
+const GameConnectionContext = createContext();
 
 export function PeerProvider({ children, peerId }) {
   const [connections, setConnections] = useState([]);
   const [peer, setPeer] = useState(null);
-  const [connected, setConnected] = useState(false)
+  const [connected, setConnected] = useState(false);
 
   useEffect(() => {
-    console.log('💥 Creating connection ', peerId)
-    const peer = new Peer(peerId, {debug:1});
+    console.log("💥 Creating connection ", peerId);
+    const peer = new Peer(peerId, { debug: 1 });
     peer.on("open", function (id) {
       console.log("My peer ID is: " + id);
-      setConnected(true)
+      setConnected(true);
 
       peer.on("connection", (conn) => {
         console.log("Someone tries to connect", conn);
@@ -29,18 +30,18 @@ export function PeerProvider({ children, peerId }) {
         conn.on("data", (data) => {
           console.log("Received data", data);
         });
-        conn.on('error', (error) => {
-            console.log("Connection error", error);
-        })
+        conn.on("error", (error) => {
+          console.log("Connection error", error);
+        });
       });
       peer.on("error", (error) => {
         console.error("PEER Error: ", error);
       });
     });
     setPeer(peer);
-    return () => {
-      peer.disconnect()
-    }
+    return () => {
+      peer.disconnect();
+    };
   }, [peerId]);
 
   return connected && peer !== null ? (
@@ -53,34 +54,44 @@ export function PeerProvider({ children, peerId }) {
 }
 
 export function usePeer() {
-  const {peer} = useContext(PeerContext)
+  const { peer } = useContext(PeerContext);
   return peer;
 }
 
 export function useConnections() {
-  const {connections} = useContext(PeerContext)
+  const { connections } = useContext(PeerContext);
   return connections;
 }
 
 export function usePlayers(): Array<Player> {
-  const connections = useConnections()
+  const connections = useConnections();
 
-  return connections.map(c => ({playerId: c.connectionId, name: 'x', color: 'y'}))
+  return connections.map((c) => ({
+    playerId: c.connectionId,
+    name: "x",
+    color: "y",
+  }));
 }
 
 export function useGameConnection(gameId) {
-  const peer = usePeer()
+
+  const [connection, setConnection] = useState(null);
+  const peer = usePeer();
   useEffect(() => {
     console.log("Connecting to game", gameId);
     const connection = peer.connect(gameId);
     connection.on("open", (data) => {
       console.log("connection success", gameId);
+      setConnection(connection)
     });
     connection.on("error", (data) => {
       console.log("connection failed", gameId);
     });
+
     return () => {
       connection.close();
     };
   }, [gameId, peer]);
+
+  return connection
 }

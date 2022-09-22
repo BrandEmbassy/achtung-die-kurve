@@ -2,20 +2,18 @@ import { Link, useParams } from 'react-router-dom'
 import { Player } from '../game/PlayerLabel';
 import React  from 'react';
 import { useGameConnection } from 'src/connection/PeerProvider';
+import { useGame } from 'src/connection/GameProvider';
 
-interface RegisterProps {
-  player?: Player;
-  updatePlayer: (player: Player) => void;
-}
 
-export const Register: React.FC<RegisterProps> = (props) => {
+
+export const Register = () => {
   const {gameId, userId} = useParams()
 
-  useGameConnection(gameId);
+  const { player, updatePlayer} = useGame();
 
   const handleRegisterPlayer = (event) => {
     event.preventDefault();
-    props.updatePlayer({
+    updatePlayer({
       playerId: userId,
       name: event.currentTarget.name.value,
       color: '#0492C2',
@@ -25,10 +23,10 @@ export const Register: React.FC<RegisterProps> = (props) => {
   return (
     <div>
       <p>Register to game {gameId}</p>
-      {props.player
+      {player
         ? <>
-            <p>Welcome {props.player?.name}</p>
-            <Link to={`/controller/${gameId}/play/${userId}`}>Start</Link>
+            <p>Welcome {player?.name}</p>
+            <Link to={`/controller/${gameId}/user/${userId}/play`}>Start</Link>
         </>
         : <form onSubmit={handleRegisterPlayer}>
             <input name="name" type={'text'} />

@@ -1,12 +1,10 @@
 import React from 'react'
+import { useGame } from 'src/connection/GameProvider';
 import { Player, PlayerLabel } from '../game/PlayerLabel';
 
-interface PlayProps {
-  player: Player;
-}
 
-export const Play: React.FC<PlayProps> = (props) => {
-  const {player} = props;
+export const Play = () => {
+  const {player} = useGame()
 
   return <>
     <h1>
