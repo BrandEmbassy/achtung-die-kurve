@@ -1,17 +1,32 @@
-import React, {  } from 'react'
+import React, { useState } from 'react'
 import {
   useParams,
 } from 'react-router-dom'
+import { Events } from 'src/connection/events'
 import { usePlayers } from '../../connection/PeerProvider'
 import { PlayerLabel } from '../PlayerLabel'
 import { PlayersList } from '../PlayersList'
 import { QrGenerator } from '../QrGenerator'
+import { useConnectionsEvent } from '../../connection/PeerProvider'
 
 interface LobbyProps {}
 
 export const Lobby = () => {
   const { gameId, ...rest } = useParams()
   const players = usePlayers()
+
+  const [action, setAction] = useState(null)
+
+  useConnectionsEvent(Events.LEFT, (player) => {
+    setAction({player, event: Events.LEFT})
+  })
+  useConnectionsEvent(Events.RIGHT, (player) => {
+    setAction({player, event: Events.RIGHT})
+  })
+  useConnectionsEvent(Events.STRAIGHT, (player) => {
+    setAction(null)
+  })
+
   const gameUrl = `${window.location.protocol}//${window.location.host}/controller/${gameId}`
   const playUrl = `${window.location.protocol}//${window.location.host}/game/${gameId}/play`
 
@@ -60,6 +75,7 @@ export const Lobby = () => {
             </div>
             <div className="py-8  leading-7">
               <p className="text-gray-900 text-base font-semibold">Players</p>
+              {action ? JSON.stringify(action) : null}
               <PlayersList players={players} />
             </div>
             <div className="pt-8 text-xs leading-7">

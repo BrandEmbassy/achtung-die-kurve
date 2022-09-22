@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Navigate, redirect, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Game } from './game'
 import Controller from './controller'
 function App() {

@@ -8,13 +8,41 @@ export function GameProvider({ children, gameId }) {
   const [player, updatePlayerInternal] = useState();
   const connection = useGameConnection(gameId);
 
-  const updatePlayer = useCallback((player) => {
-    connection.send({ eventName: Events.PLAYER, payload: player });
-    updatePlayerInternal(player);
-  }, [connection]);
+  const updatePlayer = useCallback(
+    (player) => {
+      connection.send({ eventName: Events.PLAYER, payload: player });
+      updatePlayerInternal(player);
+    },
+    [connection]
+  );
+
+  const sendRight = useCallback(() => {
+    connection.send({ eventName: Events.RIGHT, payload: player });
+  }, [connection, player]);
+
+  const sendLeft = useCallback(() => {
+    connection.send({ eventName: Events.LEFT, payload: player });
+  }, [connection, player]);
+
+  const sendStraight = useCallback(() => {
+    connection.send({ eventName: Events.STRAIGHT, payload: player });
+  }, [connection, player]);
+
+  const sendStart = useCallback(() => {
+    connection.send({ eventName: Events.START, payload: player });
+  }, [connection, player]);
 
   return connection ? (
-    <GameContext.Provider value={{ player, updatePlayer }}>
+    <GameContext.Provider
+      value={{
+        player,
+        updatePlayer,
+        sendLeft,
+        sendRight,
+        sendStraight,
+        sendStart,
+      }}
+    >
       {children}
     </GameContext.Provider>
   ) : (
