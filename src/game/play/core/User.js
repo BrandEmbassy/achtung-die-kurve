@@ -24,16 +24,17 @@ export class User extends EventEmitter {
     }
 
     this.onKeyDown = ((e) => {
+      console.log('😎😎', e)
       if (
         ![...this.controls.keys.left, ...this.controls.keys.right].includes(
-          e.keyCode
+          e
         ) ||
-        e.keyCode === this.controls.last
+        e === this.controls.last
       ) {
         return
       }
-      this.controls.pressHistory.unshift(e.keyCode)
-      this.controls.last = e.keyCode
+      this.controls.pressHistory.unshift(e)
+      this.controls.last = e
       this.onControlChange()
     }).bind(this)
     inputController.on('keydown', this.onKeyDown)
