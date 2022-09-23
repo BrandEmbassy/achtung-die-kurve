@@ -47,7 +47,6 @@ export class Game extends EventEmitter {
     const round = new Round(this)
     this.rounds.push(round)
     round.start()
-    // this.inputController.once('keydown/32', () => round.start())
 
     round
       .on('end', () => this.onRoundEnd(round))
