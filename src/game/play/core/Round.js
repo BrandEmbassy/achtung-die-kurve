@@ -104,10 +104,8 @@ export class Round extends EventEmitter {
       player.stop = true
     }
     this.emit('prepareToEnd', this)
-    // Space
-    this.game.inputController.once('keydown/32', () => {
-      this.end()
-    })
+
+    setTimeout(() => this.end(), 2000)
   }
   start() {
     for (const player of this.players.values()) {
