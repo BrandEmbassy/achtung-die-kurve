@@ -1,15 +1,17 @@
-import React from 'react'
-import { Player } from './PlayerLabel'
+import React from "react";
+import { Player, PlayerLabel } from "./PlayerLabel";
 
 interface PlayersListProps {
-  players: Array<Player>
+  players: Array<Player>;
 }
 export const PlayersList = ({ players }: PlayersListProps) => {
   return (
     <ul>
-      {players.map(player => (
-        <li key={player.playerId}>{player.name}</li>
+      {players.map((player) => (
+        <li key={player.playerId}>
+          <PlayerLabel {...player} />
+        </li>
       ))}
     </ul>
-  )
-}
+  );
+};
