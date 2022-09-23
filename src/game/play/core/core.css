@@ -124,7 +124,7 @@
 #playground .ui .main-menu .list .player .rightKey.active::before {
   content: 'Press desired right key';
 }
-.usersList{
+.usersListRight{
   color:white
 }
 #playground .ui .main-menu .start {

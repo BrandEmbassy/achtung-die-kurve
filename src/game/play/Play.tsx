@@ -8,6 +8,7 @@ interface PlayProps {}
 const Play = (props: PlayProps): JSX.Element => {
 
   const players = usePlayers()
+  console.log("PLAYTEER from PLAU", players)
   return (
     <div>
       <Playground />

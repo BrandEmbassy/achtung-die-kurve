@@ -11,7 +11,20 @@ const KEY_DOWN = 'keydown'
 
 export const Playground = () => {
   const playersList = usePlayers()
-  
+  console.log('PLAYER list z playgrounfdu', playersList)
+  const playersMock = [
+    {
+      playerId: '45RT11',
+      name: 'jarmil',
+      color: '#0492C2',
+    },
+    {
+      playerId: '123AB',
+      name: 'Pepík',
+      color: '#0F0',
+    },
+  ]
+
   useConnectionsEvent(Events.LEFT, ({playerId}) => {
     controllEventEmitter.emit(KEY_DOWN, `${playerId}.LEFT`)
   })
@@ -25,8 +38,8 @@ export const Playground = () => {
 
   useEffect(() => {
     const playgroundElement = document.querySelector('#playground')
-    const newGame = new Main(playgroundElement, playersList, controllEventEmitter)
+    const newGame = new Main(playgroundElement, playersMock, controllEventEmitter)
   }, [])
-  
+
   return null
 }

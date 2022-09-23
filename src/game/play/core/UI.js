@@ -38,8 +38,10 @@ export class UI extends EventEmitter {
     this.render = new Renderer(this.canvas)
 
     // this.initFpsCounter()
+    //this.renderUserList()
 
     this.playerList = playerList
+    console.log('PLAYERLIST,', playerList)
     // this.playerList = [
     //   { color: 'red', name: 'Fred' },
     //   { color: 'lime', name: 'Greenlee' },
@@ -81,8 +83,8 @@ export class UI extends EventEmitter {
    */
   updateScore(users) {
     this.emptyTableScore()
-    users.forEach((user) => {
-      const player = this.playerList.find((p) => p.color === user.color)
+    users.forEach(user => {
+      const player = this.playerList.find(p => p.color === user.color)
       player.$score.innerHTML = user.points
       this.$uiElements.tableScore.appendChild(player.$user)
     })
@@ -95,8 +97,8 @@ export class UI extends EventEmitter {
     this.$uiElements.fps.className = 'fps'
     this.$ui.appendChild(this.$uiElements.fps)
   }
-  renderUserList(){
-    this.$uiElements.users.innerHTML="SEZMAN useru"
+  renderUserList() {
+    this.$uiElements.usersListRight.innerHTML = 'SEZMAN useru'
   }
   initUi() {
     this.$ui.innerHTML = `
@@ -114,7 +116,7 @@ export class UI extends EventEmitter {
           <span>2 points diff</span>
 
         </div>
-        <div class="usersList">useri</div>
+        <div class="usersListRight">useri</div>
         <div class="tableScore"></div>
         <div class="navInfo">Space to continue</div>
       </div>
@@ -128,6 +130,7 @@ export class UI extends EventEmitter {
     })
     this.$uiElements.goal = this.$ui.querySelector('.goalInfo div')
     this.$uiElements.tableScore = this.$ui.querySelector('.tableScore')
+    this.$uiElements.usersListRight = this.$ui.querySelector('.usersListRight')
   }
   /**
    * Add new element to player list
@@ -140,6 +143,8 @@ export class UI extends EventEmitter {
     $player.className = 'player'
     $player.style.color = color
     this.$uiElements.playerList.appendChild($player)
+    //this.$uiElements.usersListRight.appendChild($player)
+    console.log("playerHTML",$player )
 
     const $counter = document.createElement('div')
     $counter.className = 'counter'
@@ -167,25 +172,25 @@ export class UI extends EventEmitter {
         $player.classList.add('active')
 
         $leftKey.classList.add('active')
-        this.inputController.once('keydown', (e) => {
+        this.inputController.once('keydown', e => {
           if (e.keyCode === 32) return true
           $leftKey.classList.remove('active')
           $leftKey.innerHTML = e.key.toUpperCase().replace('ARROW', '')
           this.playerList[index].leftKey = e.keyCode
 
           $rightKey.classList.add('active')
-          this.inputController.once('keydown', (e) => {
+          this.inputController.once('keydown', e => {
             if (e.keyCode === 32) return true
             $rightKey.classList.remove('active')
             $rightKey.innerHTML = e.key.toUpperCase().replace('ARROW', '')
             this.playerList[index].rightKey = e.keyCode
-const newUser={
-  color,
-  name,
-  controlsLeft: [this.playerList[index].leftKey],
-  controlsRight: [this.playerList[index].rightKey],
-}
-console.log("newUser", newUser)
+            const newUser = {
+              color,
+              name,
+              controlsLeft: [this.playerList[index].leftKey],
+              controlsRight: [this.playerList[index].rightKey],
+            }
+            console.log('newUser', newUser)
             this.emit('setUser', newUser)
             this.$uiElements.mainMenu.classList.remove('choice')
           })
@@ -226,7 +231,7 @@ console.log("newUser", newUser)
   }
   clearTableScore() {
     this.emptyTableScore()
-    this.playerList.forEach((playerInfo) => {
+    this.playerList.forEach(playerInfo => {
       playerInfo.$score.innerHTML = '0'
     })
   }
@@ -236,8 +241,8 @@ console.log("newUser", newUser)
   prepareToGame(users) {
     this.$uiElements.goal.innerHTML = users.length * 5
     this.clearTableScore()
-    this.playerList.forEach((playerInfo) => {
-      if (users.find((user) => user.color === playerInfo.color)) {
+    this.playerList.forEach(playerInfo => {
+      if (users.find(user => user.color === playerInfo.color)) {
         this.$uiElements.tableScore.appendChild(playerInfo.$user)
       }
     })
