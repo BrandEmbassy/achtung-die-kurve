@@ -24,7 +24,7 @@ export const ControllerWithPeerConnection = (): JSX.Element => {
 
   return (
     <PeerProvider peerId={userId}>
-      <GameProvider gameId={gameId}>
+      <GameProvider gameId={gameId} userId={userId}>
         <Routes>
           <Route path="/register" element={<Register />} />
           <Route path="/play" element={<Play />} />

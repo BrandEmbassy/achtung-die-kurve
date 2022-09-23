@@ -21,7 +21,6 @@ export const Register = () => {
 
   const handleColorClick = useCallback(
     (color) => {
-      console.log();
       updatePlayer({
         ...player,
         color,
@@ -38,9 +37,9 @@ export const Register = () => {
   return (
     <div>
       <p>Register to game {gameId}</p>
-      {player ? (
+      {player.name ? (
         <>
-          <p>Welcome {player?.name}</p>
+          <p>Welcome {player.name}</p>
           <button onClick={handleStartClick}>Start</button>
         </>
       ) : (

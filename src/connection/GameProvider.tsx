@@ -8,19 +8,24 @@ import {
 } from "react";
 import { useGameConnection } from "./PeerProvider";
 import { Events } from "./events";
+import { Player } from "src/game/PlayerLabel";
 
 const GameContext = createContext();
 
-export function GameProvider({ children, gameId }) {
+export function GameProvider({ children, gameId, userId }) {
   const connection = useGameConnection(gameId);
-  const [player, updatePlayerInternal] = useState();
+  const [player, updatePlayerInternal] = useState<Player>({
+    playerId: userId,
+    color: "#f0f0f0",
+    name: "",
+  });
 
   useEffect(() => {
     if (!connection) {
       return;
     }
     const player = JSON.parse(sessionStorage.getItem("player"));
-    if (player) {
+    if (player.playerId === userId) {
       connection.send({ eventName: Events.PLAYER, payload: player });
       updatePlayerInternal(player);
     }
@@ -32,7 +37,7 @@ export function GameProvider({ children, gameId }) {
       updatePlayerInternal(player);
       sessionStorage.setItem("player", JSON.stringify(player));
     },
-    [connection]
+    [connection, userId]
   );
 
   const sendRight = useCallback(() => {
