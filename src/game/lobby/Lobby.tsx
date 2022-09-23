@@ -90,19 +90,28 @@ export const Lobby = () => {
                 </li>
               </ul>
             </div>
-            <div className="py-8  leading-7">
+            <div className="py-8 leading-7">
               <p className="text-gray-900 text-base font-semibold">Players</p>
-              <PlayersList players={players} />
+              {players.length > 0
+                ? <PlayersList players={players} />
+                : <span className="text-sm text-gray-400">Nobody is here</span>
+              }
             </div>
+            {players.length > 0 &&
+                <div className="py-8 leading-7 text-center">
+                    <Link to={playUrl}
+                          className="w-full justify-center rounded-md border border-transparent bg-indigo-600 py-4 px-6 text-lg font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    >
+                        PLAY!
+                    </Link>
+                </div>
+            }
             <div className="pt-8 text-xs leading-7">
               <p className="text-gray-400">DEBUG</p>
               <p>
                 Open game at this URL: <br />
                 <a href={gameUrl}>{gameUrl}</a>
               </p>
-            </div>
-            <div>
-              <Link to={playUrl}>PLAY!</Link>
             </div>
           </div>
         </div>
