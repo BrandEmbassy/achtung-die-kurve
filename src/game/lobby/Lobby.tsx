@@ -1,34 +1,33 @@
-import React, { useState } from 'react'
-import { Link, useParams, useNavigate } from 'react-router-dom'
-import { Events } from 'src/connection/events'
-import { usePlayers } from '../../connection/PeerProvider'
-import { PlayerLabel } from '../PlayerLabel'
-import { PlayersList } from '../PlayersList'
-import { QrGenerator } from '../QrGenerator'
-import { useConnectionsEvent } from '../../connection/PeerProvider'
+import React, { useState } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { Events } from "src/connection/events";
+import { usePlayers } from "../../connection/PlayersProvider";
+import { PlayersList } from "../PlayersList";
+import { QrGenerator } from "../QrGenerator";
+import { useConnectionsEvent } from "../../connection/PeerProvider";
 
 interface LobbyProps {}
 
 export const Lobby = () => {
-  const { gameId, ...rest } = useParams()
-  const players = usePlayers()
-  const navigate = useNavigate()
+  const { gameId, ...rest } = useParams();
+  const players = usePlayers();
+  const navigate = useNavigate();
 
-  const [action, setAction] = useState(null)
+  const [action, setAction] = useState(null);
 
-  useConnectionsEvent(Events.LEFT, player => {
-    setAction({ player, event: Events.LEFT })
-  })
-  useConnectionsEvent(Events.RIGHT, player => {
-    setAction({ player, event: Events.RIGHT })
-  })
-  useConnectionsEvent(Events.STRAIGHT, player => {
-    setAction(null)
-  })
+  useConnectionsEvent(Events.LEFT, (player) => {
+    setAction({ player, event: Events.LEFT });
+  });
+  useConnectionsEvent(Events.RIGHT, (player) => {
+    setAction({ player, event: Events.RIGHT });
+  });
+  useConnectionsEvent(Events.STRAIGHT, (player) => {
+    setAction(null);
+  });
 
-  const gameUrl = `${window.location.protocol}//${window.location.host}/controller/${gameId}`
-  const playUrl = `${window.location.protocol}//${window.location.host}/game/${gameId}/play`
-  const play = `/game/${gameId}/play`
+  const gameUrl = `${window.location.protocol}//${window.location.host}/controller/${gameId}`;
+  const playUrl = `${window.location.protocol}//${window.location.host}/game/${gameId}/play`;
+  const play = `/game/${gameId}/play`;
 
   return (
     <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-6 sm:py-12">
@@ -115,5 +114,5 @@ export const Lobby = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

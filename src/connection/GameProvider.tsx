@@ -12,12 +12,12 @@ import { Events } from "./events";
 const GameContext = createContext();
 
 export function GameProvider({ children, gameId }) {
-  const [player, updatePlayerInternal] = useState();
   const connection = useGameConnection(gameId);
+  const [player, updatePlayerInternal] = useState();
 
   useEffect(() => {
     if (!connection) {
-      return
+      return;
     }
     const player = JSON.parse(sessionStorage.getItem("player"));
     if (player) {

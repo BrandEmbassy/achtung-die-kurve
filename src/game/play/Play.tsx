@@ -1,22 +1,19 @@
-import React from 'react'
-import { usePlayers } from 'src/connection/PeerProvider'
-import { PlayersList } from '../PlayersList'
-import { Playground } from './Playground'
+import { usePlayers } from "src/connection/PlayersProvider";
+import { PlayersList } from "../PlayersList";
+import { Playground } from "./Playground";
 
 interface PlayProps {}
 
 const Play = (props: PlayProps): JSX.Element => {
-
-  const players = usePlayers()
-  console.log("PLAYTEER from PLAU", players)
+  const players = usePlayers();
   return (
     <div>
       <Playground />
-      <div style={{ position: 'absolute', top: '0px', right: '0px' }}>
+      <div style={{ position: "absolute", top: "0px", right: "0px" }}>
         <PlayersList players={players} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Play
+export default Play;

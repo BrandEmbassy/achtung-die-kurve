@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Routes, useParams } from "react-router-dom";
+import { PlayersProvider } from "src/connection/PlayersProvider";
 import { PeerProvider } from "../connection/PeerProvider";
 import Lobby from "./lobby";
 import NewGameRedirect from "./NewGameRedirect";
@@ -16,13 +17,15 @@ export const Game = (): JSX.Element => {
 };
 
 export const GameWithPeerConnection = () => {
-  const { gameId } = useParams()
+  const { gameId } = useParams();
   return (
     <PeerProvider peerId={gameId}>
-      <Routes>
-        <Route path="/" element={<Lobby />} />
-        <Route path="/play" element={<Play />} />
-      </Routes>
+      <PlayersProvider>
+        <Routes>
+          <Route path="/" element={<Lobby />} />
+          <Route path="/play" element={<Play />} />
+        </Routes>
+      </PlayersProvider>
     </PeerProvider>
   );
 };
