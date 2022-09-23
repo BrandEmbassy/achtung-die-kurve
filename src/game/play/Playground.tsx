@@ -35,13 +35,9 @@ export const Playground = () => {
 
   useEffect(() => {
     const playgroundElement = document.querySelector('#playground')
-    if (!theGame) {
-      console.log('-----use effect fro new Main()')
-      theGame = new Main(
-        playgroundElement,
-        playersList,
-        controllEventEmitter
-      )
+    theGame = new Main(playgroundElement, playersList, controllEventEmitter)
+    return () => {
+      theGame = null
     }
   }, [])
 
