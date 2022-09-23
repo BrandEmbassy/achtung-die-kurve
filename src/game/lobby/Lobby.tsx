@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import {
+  useNavigate,
   useParams,
 } from 'react-router-dom'
 import { Events } from 'src/connection/events'
@@ -14,21 +15,16 @@ interface LobbyProps {}
 export const Lobby = () => {
   const { gameId, ...rest } = useParams()
   const players = usePlayers()
+  const navigate = useNavigate()
 
   const [action, setAction] = useState(null)
 
-  useConnectionsEvent(Events.LEFT, (player) => {
-    setAction({player, event: Events.LEFT})
-  })
-  useConnectionsEvent(Events.RIGHT, (player) => {
-    setAction({player, event: Events.RIGHT})
-  })
-  useConnectionsEvent(Events.STRAIGHT, (player) => {
-    setAction(null)
+
+  useConnectionsEvent(Events.START, () => {
+    navigate(`/game/${gameId}/play`)
   })
 
   const gameUrl = `${window.location.protocol}//${window.location.host}/controller/${gameId}`
-  const playUrl = `${window.location.protocol}//${window.location.host}/game/${gameId}/play`
 
   return (
     <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-6 sm:py-12">

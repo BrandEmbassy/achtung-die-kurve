@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState, useCallback, useMemo } from "react";
 import { useGameConnection } from "./PeerProvider";
 import { Events } from "./events";
 
@@ -32,21 +32,28 @@ export function GameProvider({ children, gameId }) {
     connection.send({ eventName: Events.START, payload: player });
   }, [connection, player]);
 
-  return connection ? (
-    <GameContext.Provider
-      value={{
+  const contextValue = useMemo(() => ({
         player,
         updatePlayer,
         sendLeft,
         sendRight,
         sendStraight,
         sendStart,
-      }}
+      }), [player,
+        updatePlayer,
+        sendLeft,
+        sendRight,
+        sendStraight,
+        sendStart]);
+
+  return connection ? (
+    <GameContext.Provider
+      value={contextValue}
     >
       {children}
     </GameContext.Provider>
   ) : (
-    "Connecting..."
+    "Connecting to game..."
   );
 }
 

@@ -1,14 +1,15 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { Player } from '../game/PlayerLabel';
-import React  from 'react';
+import React, { useCallback }  from 'react';
 import { useGame } from 'src/connection/GameProvider';
 
 
 
 export const Register = () => {
   const {gameId, userId} = useParams()
+  const navigate = useNavigate()
 
-  const { player, updatePlayer} = useGame();
+  const { player, updatePlayer, sendStart} = useGame();
 
   const handleRegisterPlayer = (event) => {
     event.preventDefault();
@@ -19,13 +20,18 @@ export const Register = () => {
     });
   }
 
+  const handleStartClick = useCallback(() => {
+    sendStart();
+    navigate(`/controller/${gameId}/user/${userId}/play`)
+  }, []);
+
   return (
     <div>
       <p>Register to game {gameId}</p>
       {player
         ? <>
             <p>Welcome {player?.name}</p>
-            <Link to={`/controller/${gameId}/user/${userId}/play`}>Start</Link>
+            <button onClick={handleStartClick}>Start</button>
         </>
         : <form onSubmit={handleRegisterPlayer}>
             <input name="name" type={'text'} />
