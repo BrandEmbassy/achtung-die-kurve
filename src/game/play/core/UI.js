@@ -108,6 +108,7 @@ export class UI extends EventEmitter {
         <div class="list"></div>
       </div>
       <div class="ingame">
+        
         <div class="goalInfo">
           <p>goal</p>
           <div>10</div>
@@ -116,8 +117,9 @@ export class UI extends EventEmitter {
         </div>
         <div class="usersListRight"></div>
         <div class="tableScore"></div>
-        <div class="navInfo">Space to continue</div>
+        <div class="navInfo"></div>
       </div>
+      <div class="countDown"></div>
     `
     this.$uiElements.mainMenu = this.$ui.querySelector('.main-menu')
     this.$uiElements.playerList = this.$ui.querySelector('.list')

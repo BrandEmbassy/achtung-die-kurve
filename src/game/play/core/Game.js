@@ -15,6 +15,9 @@ export class Game extends EventEmitter {
     super()
     this.inputController = inputController
     this.renderer = renderer
+    this.countDownFrom = 3
+    this.countDownRemain = this.countDownFrom
+    this.countDownInterval
     this.mapSize = {
       x: config.width,
       y: config.height,
@@ -43,10 +46,21 @@ export class Game extends EventEmitter {
     console.log('NEW USER', user)
     this.users.push(user)
   }
+  countDown(round) {
+    console.log('Count from ', this.countDownRemain)
+    document.querySelector('.countDown').innerHTML = this.countDownRemain
+    if (this.countDownRemain <= 0) {
+      clearInterval(this.countDownInterval)
+      round.start()
+      document.querySelector('.countDown').innerHTML = ''
+    }
+    this.countDownRemain -= 1
+  }
   newRound() {
+    this.countDownRemain = this.countDownFrom
     const round = new Round(this)
     this.rounds.push(round)
-    round.start()
+    this.countDownInterval = setInterval(() => this.countDown(round), 1000)
 
     round
       .on('end', () => this.onRoundEnd(round))

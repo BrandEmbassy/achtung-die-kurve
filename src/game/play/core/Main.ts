@@ -107,11 +107,14 @@ export class Main {
         this.ui.finishGame()
       }
     )
-    setTimeout(() => this.startGame(), 3000)
+    this.startGame()
   }
   startGame() {
     if (this.gameStarted) return
-    if (this.game.users.length < 2) return
+    if (this.game.users.length < 2) {
+      alert('musí byt alespoň 2!')
+      return
+    }
 
     this.gameStarted = true
     this.ui.initGame(this.game.users)
