@@ -38,20 +38,9 @@ export class UI extends EventEmitter {
     this.render = new Renderer(this.canvas)
 
     // this.initFpsCounter()
-    this.renderUserList()
 
     this.playerList = playerList
-    console.log('PLAYERLIST,', playerList)
-    // this.playerList = [
-    //   { color: 'red', name: 'Fred' },
-    //   { color: 'lime', name: 'Greenlee' },
-    //   { color: '#fd00fd', name: 'Pinkey' },
-    //   { color: '#00fdfd', name: 'Bluebell' },
-    //   { color: '#fd7e00', name: 'Willem' },
-    //   { color: '#cacaca', name: 'Greydon' },
-    //   { color: 'olive', name: 'Oliver' },
-    //   { color: 'cyan', name: 'Cyarlie' },
-    // ]
+
     this.playerList.forEach((data, i) =>
       this.initPlayer(i, data.color, data.name)
     )
@@ -60,6 +49,7 @@ export class UI extends EventEmitter {
       if (this.$uiElements.mainMenu.className.indexOf('choice') !== -1) return
       this.emit('startGame')
     })
+    //this.renderUserList()
     window.addEventListener('resize', () => this.onResize())
   }
   setSize() {
@@ -97,9 +87,17 @@ export class UI extends EventEmitter {
     this.$uiElements.fps.className = 'fps'
     this.$ui.appendChild(this.$uiElements.fps)
   }
-  renderUserList() {
-    this.$uiElements.usersListRight.innerHTML = 'SEZMAN useru'
-  }
+
+  /* renderUserList() {
+    console.log('this.playerListL', this.playerList)
+    this.playerList?.forEach(player => {
+      console.log('ol>>>>>aye', player)
+      const $player = document.createElement('div')
+      $player.innerHTML = player.name
+      this.$uiElements.usersListRight.appendChild($player)
+    })
+  } */
+
   initUi() {
     this.$ui.innerHTML = `
       <div class="main-menu">
@@ -116,7 +114,7 @@ export class UI extends EventEmitter {
           <span>2 points diff</span>
 
         </div>
-        <div class="usersListRight">useri</div>
+        <div class="usersListRight"></div>
         <div class="tableScore"></div>
         <div class="navInfo">Space to continue</div>
       </div>
@@ -143,8 +141,6 @@ export class UI extends EventEmitter {
     $player.className = 'player'
     $player.style.color = color
     this.$uiElements.playerList.appendChild($player)
-    this.$uiElements.usersListRight.appendChild($player)
-    console.log("playerHTML",$player )
 
     const $counter = document.createElement('div')
     $counter.className = 'counter'
