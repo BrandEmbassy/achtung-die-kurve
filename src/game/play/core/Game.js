@@ -3,7 +3,22 @@ import { Round } from './Round'
 import { User } from './User'
 import { EventEmitter } from './helpers/EventEmitter'
 import { InputController } from './helpers/inputController'
-
+const mockUsers = [
+  {
+    playerId:"4254353462534TRSGDF",
+    color: '#F00',
+    name: 'Jarmil',
+    controlsLeft: [37],//=>`${playerId}.LEFT"
+    controlsRight: [39],//=>4254353462534TRSGDF.RIGHT
+  },
+  {
+    playerId:"DDDDDFA",
+    color: '#0F0',
+    name: 'Pepa',
+    controlsLeft: [81],//=>"GSDFGDFGSD.LEFT"
+    controlsRight: [87],//=>"GSDFGDFGSD.RIGHT"
+  },
+]
 export class Game extends EventEmitter {
   /**
    * Renderer instance
@@ -26,7 +41,13 @@ export class Game extends EventEmitter {
     /**
      * @type {User[]}
      */
-    this.users = []
+    
+    this.users = mockUsers.map(user=>{
+      const newUser = new User(user.color, user.name, this.inputController)
+      newUser.setControls(`${user.playerId}.LEFT`, `${user.playerId}.RIGHT`)
+      return newUser
+    })
+    console.log("USERS", this.users)
     this.finished = false
   }
   /**
@@ -34,6 +55,7 @@ export class Game extends EventEmitter {
    * @param {User} user
    */
   newUser(user) {
+    console.log("NEW USER", user)
     this.users.push(user)
   }
   newRound() {
@@ -43,8 +65,8 @@ export class Game extends EventEmitter {
 
     round
       .on('end', () => this.onRoundEnd(round))
-      .on('crash', (user) => {
-        this.users.filter((u) => u !== user).forEach((u) => u.points++)
+      .on('crash', user => {
+        this.users.filter(u => u !== user).forEach(u => u.points++)
         this.users.sort((prev, next) => next.points - prev.points)
         this.emit('scoreUpdate', this.users)
       })
@@ -76,7 +98,7 @@ export class Game extends EventEmitter {
     this.finished = true
     const winnerMsg = {
       /** @param {CanvasRenderingContext2D} ctx */
-      draw: (ctx) => {
+      draw: ctx => {
         ctx.fillStyle = winner.color
         ctx.strokeStyle = winner.color
         ctx.font = '40px san-serif'
@@ -117,7 +139,7 @@ export class Game extends EventEmitter {
   }
   startGame() {
     this.rounds = []
-    this.users.forEach((user) => (user.points = 0))
+    this.users.forEach(user => (user.points = 0))
     this.finished = false
     this.newRound()
   }

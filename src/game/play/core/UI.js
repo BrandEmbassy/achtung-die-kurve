@@ -95,6 +95,9 @@ export class UI extends EventEmitter {
     this.$uiElements.fps.className = 'fps'
     this.$ui.appendChild(this.$uiElements.fps)
   }
+  renderUserList(){
+    this.$uiElements.users.innerHTML="SEZMAN useru"
+  }
   initUi() {
     this.$ui.innerHTML = `
       <div class="main-menu">
@@ -109,7 +112,9 @@ export class UI extends EventEmitter {
           <p>goal</p>
           <div>10</div>
           <span>2 points diff</span>
+
         </div>
+        <div class="usersList">useri</div>
         <div class="tableScore"></div>
         <div class="navInfo">Space to continue</div>
       </div>
@@ -174,13 +179,14 @@ export class UI extends EventEmitter {
             $rightKey.classList.remove('active')
             $rightKey.innerHTML = e.key.toUpperCase().replace('ARROW', '')
             this.playerList[index].rightKey = e.keyCode
-
-            this.emit('setUser', {
-              color,
-              name,
-              controlsLeft: [this.playerList[index].leftKey],
-              controlsRight: [this.playerList[index].rightKey],
-            })
+const newUser={
+  color,
+  name,
+  controlsLeft: [this.playerList[index].leftKey],
+  controlsRight: [this.playerList[index].rightKey],
+}
+console.log("newUser", newUser)
+            this.emit('setUser', newUser)
             this.$uiElements.mainMenu.classList.remove('choice')
           })
         })
