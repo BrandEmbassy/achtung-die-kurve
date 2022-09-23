@@ -38,7 +38,7 @@ export class UI extends EventEmitter {
     this.render = new Renderer(this.canvas)
 
     // this.initFpsCounter()
-    //this.renderUserList()
+    this.renderUserList()
 
     this.playerList = playerList
     console.log('PLAYERLIST,', playerList)
@@ -143,7 +143,7 @@ export class UI extends EventEmitter {
     $player.className = 'player'
     $player.style.color = color
     this.$uiElements.playerList.appendChild($player)
-    //this.$uiElements.usersListRight.appendChild($player)
+    this.$uiElements.usersListRight.appendChild($player)
     console.log("playerHTML",$player )
 
     const $counter = document.createElement('div')

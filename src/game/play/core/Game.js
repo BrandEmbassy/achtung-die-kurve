@@ -2,31 +2,16 @@ import { Renderer } from './Renderer'
 import { Round } from './Round'
 import { User } from './User'
 import { EventEmitter } from './helpers/EventEmitter'
-import { InputController } from './helpers/inputController'
-const mockUsers = [
-  {
-    playerId:"4254353462534TRSGDF",
-    color: '#F00',
-    name: 'Jarmil',
-    controlsLeft: [37],//=>`${playerId}.LEFT"
-    controlsRight: [39],//=>4254353462534TRSGDF.RIGHT
-  },
-  {
-    playerId:"DDDDDFA",
-    color: '#0F0',
-    name: 'Pepa',
-    controlsLeft: [81],//=>"GSDFGDFGSD.LEFT"
-    controlsRight: [87],//=>"GSDFGDFGSD.RIGHT"
-  },
-]
 export class Game extends EventEmitter {
   /**
    * Renderer instance
    * @param {Renderer} renderer
    * @param {InputController} inputController
    * @param {{width: number, height: number}} config
+   * @param {import('src/game/PlayerLabel.jsx').Player[]} players
+   *
    */
-  constructor(renderer, inputController, config) {
+  constructor(renderer, inputController, config, players = []) {
     super()
     this.inputController = inputController
     this.renderer = renderer
@@ -41,13 +26,13 @@ export class Game extends EventEmitter {
     /**
      * @type {User[]}
      */
-    
-    this.users = mockUsers.map(user=>{
+
+    this.users = players.map(user => {
       const newUser = new User(user.color, user.name, this.inputController)
       newUser.setControls(`${user.playerId}.LEFT`, `${user.playerId}.RIGHT`)
       return newUser
     })
-    console.log("USERS", this.users)
+    console.log('USERS', this.users)
     this.finished = false
   }
   /**
@@ -55,7 +40,7 @@ export class Game extends EventEmitter {
    * @param {User} user
    */
   newUser(user) {
-    console.log("NEW USER", user)
+    console.log('NEW USER', user)
     this.users.push(user)
   }
   newRound() {

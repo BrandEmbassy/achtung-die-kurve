@@ -9,7 +9,7 @@ export class Main {
   ui: UI
   game: Game
   gameStarted: boolean
-  
+
   /**
    * Main class
    * @param {HTMLElement} $app
@@ -19,10 +19,15 @@ export class Main {
     $app.style.display = 'block'
     this.inputController = controllEventEmitter
     this.ui = new UI($app, this.inputController, playerList)
-    this.game = new Game(this.ui.render, this.inputController, {
-      width: this.ui.width - 150,
-      height: this.ui.height,
-    })
+    this.game = new Game(
+      this.ui.render,
+      this.inputController,
+      {
+        width: this.ui.width - 150,
+        height: this.ui.height,
+      },
+      playerList
+    )
     this.gameStarted = false
 
     this.ui.on(
@@ -30,8 +35,8 @@ export class Main {
       /**
        * @param {{color: string, name: string, controlsLeft: number[], controlsRight: number[]}} config
        */
-      (config) => {
-        let user = this.game.users.find((user) => user.color === config.color)
+      config => {
+        let user = this.game.users.find(user => user.color === config.color)
         if (!user) {
           const user = new User(config.color, config.name, this.inputController)
           user.setControls(config.controlsLeft, config.controlsRight)
@@ -51,8 +56,8 @@ export class Main {
       /**
        * @param {string} color
        */
-      (color) => {
-        const idx = this.game.users.findIndex((user) => user.color === color)
+      color => {
+        const idx = this.game.users.findIndex(user => user.color === color)
         this.game.users[idx].destroy()
         this.game.users.splice(idx, 1)
       }
@@ -67,7 +72,7 @@ export class Main {
       /**
        * @param {User[]} users
        */
-      (users) => {
+      users => {
         this.ui.updateScore(users)
       }
     )
@@ -77,10 +82,10 @@ export class Main {
       /**
        * @param {User[]} users
        */
-      (users) => {
+      users => {
         this.gameStarted = false
         this.game.rounds = []
-        this.game.users.forEach((user) => (user.points = 0))
+        this.game.users.forEach(user => (user.points = 0))
         this.ui.finishGame()
       }
     )
