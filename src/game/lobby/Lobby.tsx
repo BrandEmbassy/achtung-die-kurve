@@ -13,21 +13,13 @@ export const Lobby = () => {
   const players = usePlayers();
   const navigate = useNavigate();
 
-  const [action, setAction] = useState(null);
+  const playUrl = `/game/${gameId}/play`;
 
-  useConnectionsEvent(Events.LEFT, (player) => {
-    setAction({ player, event: Events.LEFT });
-  });
-  useConnectionsEvent(Events.RIGHT, (player) => {
-    setAction({ player, event: Events.RIGHT });
-  });
-  useConnectionsEvent(Events.STRAIGHT, (player) => {
-    setAction(null);
+  useConnectionsEvent(Events.START, (player) => {
+    navigate(playUrl);
   });
 
   const gameUrl = `${window.location.protocol}//${window.location.host}/controller/${gameId}`;
-  const playUrl = `${window.location.protocol}//${window.location.host}/game/${gameId}/play`;
-  const play = `/game/${gameId}/play`;
 
   return (
     <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-6 sm:py-12">
@@ -108,7 +100,7 @@ export const Lobby = () => {
               </p>
             </div>
             <div>
-              <Link to={play}>PLAY!</Link>
+              <Link to={playUrl}>PLAY!</Link>
             </div>
           </div>
         </div>
