@@ -1,7 +1,7 @@
 import { EventEmitter } from './EventEmitter'
 
 export class InputController extends EventEmitter {
-  constructor(peerConnection) {
+  constructor($el) {
     super()
     $el.addEventListener(
       'keydown',

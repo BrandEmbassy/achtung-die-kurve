@@ -9,12 +9,14 @@ export class Main {
   ui: UI
   game: Game
   gameStarted: boolean
+  
   /**
    * Main class
    * @param {HTMLElement} $app
    */
   constructor($app, playerList: Player[]) {
     $app.setAttribute('tabindex', '1')
+    $app.style.display = 'block'
     this.inputController = new InputController($app)
     this.ui = new UI($app, this.inputController, playerList)
     this.game = new Game(this.ui.render, this.inputController, {

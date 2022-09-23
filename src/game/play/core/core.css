@@ -4,6 +4,8 @@
   background: black;
   width: 640px;
   height: 480px;
+  display: none;
+  transform-origin: top left;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
    -khtml-user-select: none;

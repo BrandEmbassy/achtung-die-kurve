@@ -37,7 +37,7 @@ export class UI extends EventEmitter {
 
     this.render = new Renderer(this.canvas)
 
-    this.initFpsCounter()
+    // this.initFpsCounter()
 
     this.playerList = playerList
     // this.playerList = [
