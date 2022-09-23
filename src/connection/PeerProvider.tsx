@@ -72,7 +72,9 @@ export const useConnectionsEvent = (eventName, process) => {
       conn.on("data", (data) => {
         if (data.eventName === eventName) {
           const cleanup = process(data.payload);
-          cleanup ?? conn.on("close", cleanup);
+          if (cleanup) {
+            conn.on("close", cleanup);
+          }
         }
       })
     );
@@ -86,6 +88,7 @@ export function usePlayers(): Array<Player> {
     setPlayers((prev) => [...prev, player]);
 
     return () => {
+      console.log('💥 Clean players')
       setPlayers((prev) =>
         prev.filter((p) => p.playerId !== player.playerId)
       );

@@ -1,4 +1,11 @@
-import { createContext, useContext, useState, useCallback, useMemo } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+} from "react";
 import { useGameConnection } from "./PeerProvider";
 import { Events } from "./events";
 
@@ -8,10 +15,22 @@ export function GameProvider({ children, gameId }) {
   const [player, updatePlayerInternal] = useState();
   const connection = useGameConnection(gameId);
 
+  useEffect(() => {
+    if (!connection) {
+      return
+    }
+    const player = JSON.parse(sessionStorage.getItem("player"));
+    if (player) {
+      connection.send({ eventName: Events.PLAYER, payload: player });
+      updatePlayerInternal(player);
+    }
+  }, [connection]);
+
   const updatePlayer = useCallback(
     (player) => {
       connection.send({ eventName: Events.PLAYER, payload: player });
       updatePlayerInternal(player);
+      sessionStorage.setItem("player", JSON.stringify(player));
     },
     [connection]
   );
@@ -32,26 +51,20 @@ export function GameProvider({ children, gameId }) {
     connection.send({ eventName: Events.START, payload: player });
   }, [connection, player]);
 
-  const contextValue = useMemo(() => ({
-        player,
-        updatePlayer,
-        sendLeft,
-        sendRight,
-        sendStraight,
-        sendStart,
-      }), [player,
-        updatePlayer,
-        sendLeft,
-        sendRight,
-        sendStraight,
-        sendStart]);
+  const contextValue = useMemo(
+    () => ({
+      player,
+      updatePlayer,
+      sendLeft,
+      sendRight,
+      sendStraight,
+      sendStart,
+    }),
+    [player, updatePlayer, sendLeft, sendRight, sendStraight, sendStart]
+  );
 
   return connection ? (
-    <GameContext.Provider
-      value={contextValue}
-    >
-      {children}
-    </GameContext.Provider>
+    <GameContext.Provider value={contextValue}>{children}</GameContext.Provider>
   ) : (
     "Connecting to game..."
   );
