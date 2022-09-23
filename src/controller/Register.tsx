@@ -10,24 +10,20 @@ export const Register = () => {
 
   const { player, updatePlayer, sendStart } = useGame();
 
-  const handleRegisterPlayer = (event) => {
+  const handleRegisterPlayer = useCallback((event) => {
     event.preventDefault();
-    updatePlayer({
-      playerId: userId,
-      name: event.currentTarget.name.value,
-      color: "gray",
-    });
-  };
+    updatePlayer((prevPlayer) => ({
+      ...prevPlayer,
+      name: event.target.name.value,
+    }));
+  }, []);
 
-  const handleColorClick = useCallback(
-    (color) => {
-      updatePlayer({
-        ...player,
-        color,
-      });
-    },
-    [player]
-  );
+  const handleColorClick = useCallback((color) => {
+    updatePlayer((prevPlayer) => ({
+      ...prevPlayer,
+      color,
+    }));
+  }, []);
 
   const handleStartClick = useCallback(() => {
     sendStart();

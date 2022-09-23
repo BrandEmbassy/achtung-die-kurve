@@ -16,7 +16,7 @@ export function GameProvider({ children, gameId, userId }) {
   const connection = useGameConnection(gameId);
   const [player, updatePlayerInternal] = useState<Player>({
     playerId: userId,
-    color: "#f0f0f0",
+    color: "gray",
     name: "",
   });
 
@@ -25,19 +25,28 @@ export function GameProvider({ children, gameId, userId }) {
       return;
     }
     const player = JSON.parse(sessionStorage.getItem("player"));
-    if (player.playerId === userId) {
+    if (player?.playerId === userId) {
       connection.send({ eventName: Events.PLAYER, payload: player });
       updatePlayerInternal(player);
     }
-  }, [connection]);
+  }, [connection, userId]);
 
   const updatePlayer = useCallback(
     (player) => {
-      connection.send({ eventName: Events.PLAYER, payload: player });
-      updatePlayerInternal(player);
-      sessionStorage.setItem("player", JSON.stringify(player));
+      if (typeof player === "function") {
+        updatePlayerInternal((prevPlayer) => {
+          const newPlayer = player(prevPlayer);
+          connection.send({ eventName: Events.PLAYER, payload: newPlayer });
+          sessionStorage.setItem("player", JSON.stringify(newPlayer));
+          return newPlayer;
+        });
+      } else {
+        updatePlayerInternal(player);
+        connection.send({ eventName: Events.PLAYER, payload: player });
+        sessionStorage.setItem("player", JSON.stringify(player));
+      }
     },
-    [connection, userId]
+    [connection]
   );
 
   const sendRight = useCallback(() => {
