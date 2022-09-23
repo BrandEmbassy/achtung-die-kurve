@@ -1,12 +1,19 @@
-import { createContext, useState, useContext } from "react";
+import {
+  createContext,
+  useState,
+  useContext,
+  useCallback,
+  useMemo,
+} from "react";
 import { Player } from "src/game/PlayerLabel";
 import { Events } from "./events";
-import { useConnectionsEvent } from "./PeerProvider";
+import { useConnections, useConnectionsEvent } from "./PeerProvider";
 
 const PlayersContext = createContext();
 
 export function PlayersProvider({ children }) {
   const [players, setPlayers] = useState([]);
+  const connections = useConnections();
 
   useConnectionsEvent(Events.PLAYER, (player) => {
     setPlayers((prev) => {
@@ -22,13 +29,36 @@ export function PlayersProvider({ children }) {
     };
   });
 
+  const broadcast = useCallback(
+    (event) => {
+      connections.forEach((conn) => {
+        conn.send(event);
+      });
+    },
+    [connections]
+  );
+
+  const contextValue = useMemo(
+    () => ({
+      players,
+      broadcast,
+    }),
+    [players, broadcast]
+  );
+
   return (
-    <PlayersContext.Provider value={players}>
+    <PlayersContext.Provider value={contextValue}>
       {children}
     </PlayersContext.Provider>
   );
 }
 
 export function usePlayers(): Array<Player> {
-  return useContext(PlayersContext);
+  const { players } = useContext(PlayersContext);
+  return players;
+}
+
+export function useBroadcast() {
+  const { broadcast } = useContext(PlayersContext);
+  return broadcast;
 }

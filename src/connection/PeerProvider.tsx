@@ -10,6 +10,7 @@ export function PeerProvider({ children, peerId }) {
   const [connections, setConnections] = useState([]);
   const [peer, setPeer] = useState(null);
   const [connected, setConnected] = useState(false);
+  const [gameConnection, setGameConnection] = useState(null);
 
   useEffect(() => {
     console.log("💥 Creating connection ", peerId);
@@ -46,11 +47,18 @@ export function PeerProvider({ children, peerId }) {
   }, [peerId]);
 
   return connected && peer !== null ? (
-    <PeerContext.Provider value={{ peer, connections }}>
+    <PeerContext.Provider
+      value={{
+        peer,
+        connections,
+        gameConnection,
+        setGameConnection,
+      }}
+    >
       {children}
     </PeerContext.Provider>
   ) : (
-    <div>Connecting...</div>
+    <div>Connecting peer...</div>
   );
 }
 
@@ -82,23 +90,48 @@ export const useConnectionsEvent = (eventName, process) => {
 };
 
 export function useGameConnection(gameId) {
-  const [connection, setConnection] = useState(null);
+  const { gameConnection, setGameConnection } = useContext(PeerContext);
   const peer = usePeer();
+
   useEffect(() => {
-    console.log("Connecting to game", gameId);
+    console.log("Connecting to game");
     const connection = peer.connect(gameId);
     connection.on("open", (data) => {
-      console.log("connection success", gameId);
-      setConnection(connection);
+      console.log("connection success");
+      setGameConnection(connection);
     });
-    connection.on("error", (data) => {
-      console.log("connection failed", gameId);
+    connection.on("data", (data) => {
+      console.log("data recieved", data);
+    });
+    connection.on("error", (error) => {
+      console.error("connection failed", error);
     });
 
     return () => {
       connection.close();
     };
-  }, [gameId, peer]);
+  }, [peer, gameId]);
 
-  return connection;
+  console.log("💥 useGameConnection", gameConnection);
+
+  return gameConnection;
+}
+
+export function useGameConnectionEvent(gameId, eventName, process) {
+  const connection = useGameConnection(gameId);
+
+  useEffect(() => {
+    if (connection) {
+      const handler = (data) => {
+        if (data.eventName === eventName) {
+          const cleanup = process(data.payload);
+          if (cleanup) {
+            connection.on("close", cleanup);
+          }
+        }
+      };
+      connection.on("data", handler);
+      return () => connection.off("data", handler);
+    }
+  }, [eventName, process]);
 }

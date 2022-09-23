@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Events } from "src/connection/events";
-import { usePlayers } from "../../connection/PlayersProvider";
+import { useBroadcast, usePlayers } from "../../connection/PlayersProvider";
 import { PlayersList } from "../PlayersList";
 import { QrGenerator } from "../QrGenerator";
 import { useConnectionsEvent } from "../../connection/PeerProvider";
@@ -11,11 +11,13 @@ interface LobbyProps {}
 export const Lobby = () => {
   const { gameId, ...rest } = useParams();
   const players = usePlayers();
+  const broadcast = useBroadcast();
   const navigate = useNavigate();
 
   const playUrl = `/game/${gameId}/play`;
 
-  useConnectionsEvent(Events.START, (player) => {
+  useConnectionsEvent(Events.START, () => {
+    broadcast({ eventName: Events.START });
     navigate(playUrl);
   });
 
