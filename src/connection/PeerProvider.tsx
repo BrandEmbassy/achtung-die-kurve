@@ -94,6 +94,9 @@ export function useGameConnection(gameId) {
   const peer = usePeer();
 
   useEffect(() => {
+    if (gameConnection) {
+      return;
+    }
     console.log("Connecting to game");
     const connection = peer.connect(gameId);
     connection.on("open", (data) => {
@@ -108,6 +111,7 @@ export function useGameConnection(gameId) {
     });
 
     return () => {
+      setGameConnection(null);
       connection.close();
     };
   }, [peer, gameId]);
