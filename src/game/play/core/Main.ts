@@ -14,10 +14,10 @@ export class Main {
    * Main class
    * @param {HTMLElement} $app
    */
-  constructor($app, playerList: Player[]) {
+  constructor($app, playerList: Player[], controllEventEmitter) {
     $app.setAttribute('tabindex', '1')
     $app.style.display = 'block'
-    this.inputController = new InputController($app)
+    this.inputController = controllEventEmitter
     this.ui = new UI($app, this.inputController, playerList)
     this.game = new Game(this.ui.render, this.inputController, {
       width: this.ui.width - 150,
