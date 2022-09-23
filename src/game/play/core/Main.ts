@@ -32,7 +32,7 @@ export class Main {
    * @param {HTMLElement} $app
    */
   constructor($app, playerList: Player[], controllEventEmitter) {
-    const currentPlayersList = [...playerList, ...mockUsers]
+    const currentPlayersList = [...playerList]// ...mockUsers]
     $app.setAttribute('tabindex', '1')
     $app.style.display = 'block'
     this.inputController = controllEventEmitter
