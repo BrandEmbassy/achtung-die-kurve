@@ -4,6 +4,23 @@ import { User } from './User'
 import { InputController } from './helpers/inputController'
 import { Player } from '../../PlayerLabel'
 
+const mockUsers = [
+  {
+    playerId: '4254353462534TRSGDF',
+    color: '#44A',
+    name: 'Pankrác',
+    controlsLeft: [37], //=>`${playerId}.LEFT"
+    controlsRight: [39], //=>4254353462534TRSGDF.RIGHT
+  },
+  {
+    playerId: 'DDDDDFA',
+    color: '#0FA',
+    name: 'Jarmil',
+    controlsLeft: [81], //=>"GSDFGDFGSD.LEFT"
+    controlsRight: [87], //=>"GSDFGDFGSD.RIGHT"
+  },
+]
+
 export class Main {
   inputController: InputController
   ui: UI
@@ -15,10 +32,11 @@ export class Main {
    * @param {HTMLElement} $app
    */
   constructor($app, playerList: Player[], controllEventEmitter) {
+    const currentPlayersList = [...playerList, ...mockUsers]
     $app.setAttribute('tabindex', '1')
     $app.style.display = 'block'
     this.inputController = controllEventEmitter
-    this.ui = new UI($app, this.inputController, playerList)
+    this.ui = new UI($app, this.inputController, currentPlayersList)
     this.game = new Game(
       this.ui.render,
       this.inputController,
@@ -26,7 +44,7 @@ export class Main {
         width: this.ui.width - 150,
         height: this.ui.height,
       },
-      playerList
+      currentPlayersList
     )
     this.gameStarted = false
 
@@ -89,6 +107,7 @@ export class Main {
         this.ui.finishGame()
       }
     )
+    setTimeout(() => this.startGame(), 3000)
   }
   startGame() {
     if (this.gameStarted) return
