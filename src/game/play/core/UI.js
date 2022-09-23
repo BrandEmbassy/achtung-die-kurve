@@ -9,8 +9,9 @@ export class UI extends EventEmitter {
    * Graphic user interface
    * @param {HTMLElement} $app Element
    * @param {InputController} inputController
+   * @param {import('src/game/PlayerLabel.jsx').Player[]} playerList
    */
-  constructor($app, inputController) {
+  constructor($app, inputController, playerList = []) {
     super()
     this.$app = $app
     this.inputController = inputController
@@ -24,6 +25,7 @@ export class UI extends EventEmitter {
     this.$uiElements = {}
     this.initUi()
 
+    this.$app.innerHTML = ''
     this.$app.appendChild(this.canvas)
     this.$app.appendChild(this.$ui)
 
@@ -37,16 +39,17 @@ export class UI extends EventEmitter {
 
     this.initFpsCounter()
 
-    this.playerList = [
-      { color: 'red', name: 'Fred' },
-      { color: 'lime', name: 'Greenlee' },
-      { color: '#fd00fd', name: 'Pinkey' },
-      { color: '#00fdfd', name: 'Bluebell' },
-      { color: '#fd7e00', name: 'Willem' },
-      { color: '#cacaca', name: 'Greydon' },
-      { color: 'olive', name: 'Oliver' },
-      { color: 'cyan', name: 'Cyarlie' },
-    ]
+    this.playerList = playerList
+    // this.playerList = [
+    //   { color: 'red', name: 'Fred' },
+    //   { color: 'lime', name: 'Greenlee' },
+    //   { color: '#fd00fd', name: 'Pinkey' },
+    //   { color: '#00fdfd', name: 'Bluebell' },
+    //   { color: '#fd7e00', name: 'Willem' },
+    //   { color: '#cacaca', name: 'Greydon' },
+    //   { color: 'olive', name: 'Oliver' },
+    //   { color: 'cyan', name: 'Cyarlie' },
+    // ]
     this.playerList.forEach((data, i) =>
       this.initPlayer(i, data.color, data.name)
     )
@@ -96,15 +99,7 @@ export class UI extends EventEmitter {
     this.$ui.innerHTML = `
       <div class="main-menu">
         <div class="title">
-          <span>Achtung, </span>
-          <span>die Kurve!<span>
-        </div>
-        <div class="subtitle">
-          akcyp remake
-        </div>
-        <div class="control-info">
-          <span>left</span>
-          <span>right</span>
+          <span>Achtung, ty Kurvo!</span>
         </div>
         <div class="start">Start</div>
         <div class="list"></div>

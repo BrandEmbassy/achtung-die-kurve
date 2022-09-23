@@ -2,16 +2,21 @@ import { UI } from './UI'
 import { Game } from './Game'
 import { User } from './User'
 import { InputController } from './helpers/inputController'
+import { Player } from '../../PlayerLabel'
 
 export class Main {
+  inputController: InputController
+  ui: UI
+  game: Game
+  gameStarted: boolean
   /**
    * Main class
    * @param {HTMLElement} $app
    */
-  constructor($app) {
+  constructor($app, playerList: Player[]) {
     $app.setAttribute('tabindex', '1')
     this.inputController = new InputController($app)
-    this.ui = new UI($app, this.inputController)
+    this.ui = new UI($app, this.inputController, playerList)
     this.game = new Game(this.ui.render, this.inputController, {
       width: this.ui.width - 150,
       height: this.ui.height,
