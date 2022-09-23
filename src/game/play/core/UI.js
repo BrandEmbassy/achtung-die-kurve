@@ -45,10 +45,10 @@ export class UI extends EventEmitter {
       this.initPlayer(i, data.color, data.name)
     )
 
-    inputController.on('keydown/32', () => {
+   /*  inputController.on('keydown/32', () => {
       if (this.$uiElements.mainMenu.className.indexOf('choice') !== -1) return
       this.emit('startGame')
-    })
+    }) */
     //this.renderUserList()
     window.addEventListener('resize', () => this.onResize())
   }
@@ -124,10 +124,10 @@ export class UI extends EventEmitter {
     this.$uiElements.mainMenu = this.$ui.querySelector('.main-menu')
     this.$uiElements.playerList = this.$ui.querySelector('.list')
     this.$uiElements.start = this.$ui.querySelector('.start')
-    this.$uiElements.start.addEventListener('click', () => {
+    /* this.$uiElements.start.addEventListener('click', () => {
       if (this.$uiElements.mainMenu.className.indexOf('choice') !== -1) return
       this.emit('startGame')
-    })
+    }) */
     this.$uiElements.goal = this.$ui.querySelector('.goalInfo div')
     this.$uiElements.tableScore = this.$ui.querySelector('.tableScore')
     this.$uiElements.usersListRight = this.$ui.querySelector('.usersListRight')

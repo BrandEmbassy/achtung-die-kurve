@@ -62,7 +62,7 @@ export class Round extends EventEmitter {
     })
     this.players.set(user, player)
     this.game.renderer.push(player)
-    user.on('input', (dir) => {
+    user.on('input', dir => {
       if (!this.started || this.ended) {
         return
       }
@@ -76,7 +76,7 @@ export class Round extends EventEmitter {
       if (player.immune) return
       if (
         this.isOutOfMap(player) ||
-        Array.from(this.players.values()).some((p) =>
+        Array.from(this.players.values()).some(p =>
           p.curve.interfere(
             player.position,
             player.curve.weight / 2,
@@ -89,10 +89,10 @@ export class Round extends EventEmitter {
         player.emit('crash')
         this.emit('crash', user)
         if (
-          [...this.players.values()].filter(
-            (player) => player.crashed === false
-          ).length < 2
+          [...this.players.values()].filter(player => player.crashed === false)
+            .length < 2
         ) {
+          console.log("This player already CRASHED", [...this.players.values()].filter(player => player.crashed === true))
           this.prepareToEnd()
         }
       }
@@ -104,7 +104,7 @@ export class Round extends EventEmitter {
       player.stop = true
     }
     this.emit('prepareToEnd', this)
-
+    console.log('prepareToEnd')
     setTimeout(() => this.end(), 2000)
   }
   start() {
