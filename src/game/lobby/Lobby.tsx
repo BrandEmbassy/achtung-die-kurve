@@ -17,9 +17,6 @@ export const Lobby = () => {
   const players = usePlayers()
   const navigate = useNavigate()
 
-  const [action, setAction] = useState(null)
-
-
   useConnectionsEvent(Events.START, () => {
     navigate(`/game/${gameId}/play`)
   })
@@ -71,7 +68,6 @@ export const Lobby = () => {
             </div>
             <div className="py-8  leading-7">
               <p className="text-gray-900 text-base font-semibold">Players</p>
-              {action ? JSON.stringify(action) : null}
               <PlayersList players={players} />
             </div>
             <div className="pt-8 text-xs leading-7">
