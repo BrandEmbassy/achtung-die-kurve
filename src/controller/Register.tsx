@@ -12,11 +12,11 @@ export const Register = () => {
 
   const { player, updatePlayer, sendStart } = useGame();
 
-  const handleRegisterPlayer = useCallback((event) => {
+  const handleChangeEvent = useCallback((event) => {
     event.preventDefault();
     updatePlayer((prevPlayer) => ({
       ...prevPlayer,
-      name: event.target.name.value,
+      name: event.target.value,
     }));
   }, []);
 
@@ -27,9 +27,7 @@ export const Register = () => {
     }));
   }, []);
 
-  const handleStartClick = useCallback(() => {
-    sendStart();
-  }, []);
+  const handleStartClick = useCallback(sendStart, []);
 
   useGameConnectionEvent(gameId, Events.START, () => {
     navigate(`/controller/${gameId}/user/${userId}/play`);
@@ -52,69 +50,48 @@ export const Register = () => {
             </h1>
             <div className="divide-y divide-gray-300/50">
               <div className="space-y-6 py-4"></div>
-              {player?.name ? (
-                <>
-                  <div className="py-8">
-                    <PlayerLabel
-                      key={player.playerId}
-                      playerId={player.playerId}
-                      color={player.color}
-                      name={player.name}
-                    />
+
+              <div className="divide-y divide-gray-300/50">
+                <div className="py-8">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Player name
+                  </label>
+                  <input
+                    onChange={handleChangeEvent}
+                    name="name"
+                    type={"text"}
+                    className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  />
+                  <label className="pt-8 block text-sm font-medium text-gray-700">
+                    Color (selected {player?.color})
+                  </label>
+                  <div className="p-4 grid grid-cols-4 gap-4 lg:gap-8 rounded-lg border border-gray-300 shadow-sm">
+                    {Object.keys(Colors).map((color) => (
+                      <div
+                        key={color}
+                        onClick={() => handleColorClick(color)}
+                        style={{ backgroundColor: color }}
+                        className={
+                          "h-12 p-4 rounded-lg flex items-center justify-center hover:border-4 border-indigo-600 {color}} shadow-sm hover:cursor-pointer" +
+                          (player?.color === color ? " border-4" : undefined)
+                        }
+                      ></div>
+                    ))}
                   </div>
-                  <div className="py-8">
-                    <button
-                      onClick={handleStartClick}
-                      className="w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                      Start
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <form
-                  onSubmit={handleRegisterPlayer}
-                  className="divide-y divide-gray-300/50"
-                >
-                  <div className="py-8">
-                    <label
-                      htmlFor="name"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Player name
-                    </label>
-                    <input
-                      name="name"
-                      type={"text"}
-                      className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    />
-                    <label className="pt-8 block text-sm font-medium text-gray-700">
-                      Color (selected {player?.color})
-                    </label>
-                    <div className="p-4 grid grid-cols-4 gap-4 lg:gap-8 rounded-lg border border-gray-300 shadow-sm">
-                      {Object.keys(Colors).map((color) => (
-                        <div
-                          key={color}
-                          onClick={() => handleColorClick(color)}
-                          style={{ backgroundColor: color }}
-                          className={
-                            "h-12 p-4 rounded-lg flex items-center justify-center hover:border-4 border-indigo-600 {color}} shadow-sm hover:cursor-pointer" +
-                            (player?.color === color ? " border-4" : undefined)
-                          }
-                        ></div>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="py-8">
-                    <button
-                      type="submit"
-                      className="w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                      Join to game
-                    </button>
-                  </div>
-                </form>
-              )}
+                </div>
+
+                <div className="py-8">
+                  <button
+                    onClick={handleStartClick}
+                    className="w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  >
+                    Start
+                  </button>
+                </div>
+              </div>
             </div>
             <div className="text-xs leading-7 text-gray-400">
               GAME ID: {gameId}
