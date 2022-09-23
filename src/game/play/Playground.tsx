@@ -30,9 +30,7 @@ export const Playground = () => {
     controllEventEmitter.emit(KEY_DOWN, `${playerId}.RIGHT`);
   });
   useConnectionsEvent(Events.STRAIGHT, (event) => {
-    console.log("💣💣💣", event);
     const { playerId } = event
-    console.log("🤦‍♂️🤦‍♂️🤦‍♂️", playerId, event);
     controllEventEmitter.emit(KEY_UP, `${playerId}.LEFT`);
     controllEventEmitter.emit(KEY_UP, `${playerId}.RIGHT`);
   });

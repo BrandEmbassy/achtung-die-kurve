@@ -23,12 +23,9 @@ export class User extends EventEmitter {
       last: null,
     }
 
-    this.onKeyDown = ((e) => {
-      console.log('😎😎', e)
+    this.onKeyDown = (e => {
       if (
-        ![...this.controls.keys.left, ...this.controls.keys.right].includes(
-          e
-        ) ||
+        ![this.controls.keys.left, this.controls.keys.right].includes(e) ||
         e === this.controls.last
       ) {
         return
@@ -39,16 +36,15 @@ export class User extends EventEmitter {
     }).bind(this)
     inputController.on('keydown', this.onKeyDown)
 
-    this.onKeyUp = ((e) => {
+    this.onKeyUp = (e => {
       if (
-        ![...this.controls.keys.left, ...this.controls.keys.right].includes(
-          e.keyCode
-        )
+        ![this.controls.keys.left, this.controls.keys.right].includes(e) ||
+        e === this.controls.last
       ) {
         return
       }
       this.controls.pressHistory.splice(
-        this.controls.pressHistory.indexOf(e.keyCode),
+        this.controls.pressHistory.indexOf(e),
         1
       )
       // Resore last
@@ -59,7 +55,7 @@ export class User extends EventEmitter {
   }
   onControlChange() {
     const key =
-      Object.keys(this.controls.keys).find((key) =>
+      Object.keys(this.controls.keys).find(key =>
         this.controls.keys[key].includes(this.controls.last)
       ) || null
     this.emit('input', key)
